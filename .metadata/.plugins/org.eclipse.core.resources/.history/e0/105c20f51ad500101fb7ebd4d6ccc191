@@ -1,0 +1,5 @@
+package com.app.configs;
+
+public class CorsConfig {
+
+}
