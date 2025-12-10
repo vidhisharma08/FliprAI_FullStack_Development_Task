@@ -6,4 +6,5 @@
     <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
     <fullyQualifiedTypeName name="com.app.repository.ProjectRepository"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.GetMapping"/>
+    <fullyQualifiedTypeName name="org.springframework.context.annotation.Configuration"/>
 </qualifiedTypeNameHistroy>
