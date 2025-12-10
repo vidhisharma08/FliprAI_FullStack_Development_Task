@@ -1,30 +1,30 @@
-# ---------- Build Stage ----------
-# Use Maven + JDK 17 to build the Spring Boot jar
+# ---------- Build stage ----------
+# Maven + JDK 17 image to build the Spring Boot jar
 FROM maven:3.9-eclipse-temurin-17 AS build
 
-# Set working directory inside the container
-WORKDIR /app
+# Work directory inside container (build stage)
+WORKDIR /build
 
-# Copy pom.xml and download dependencies (layer cache)
+# Copy pom.xml and download dependencies
 COPY pom.xml .
-RUN mvn -q dependency:go-offline
+RUN mvn -B dependency:go-offline
 
-# Copy the source code and build the application
+# Copy source code and build the project
 COPY src ./src
-RUN mvn -q -DskipTests package
+RUN mvn -B clean package -DskipTests
 
-# ---------- Runtime Stage ----------
-# Small image with only JRE 17
+# ---------- Runtime stage ----------
+# Lightweight JRE 17 image to run the app
 FROM eclipse-temurin:17-jre-alpine
 
-# Working directory for the app
+# Work directory for running app
 WORKDIR /app
 
-# Copy the built jar from the build stage
-COPY --from=build /app/target/*.jar app.jar
+# Copy the built jar from the build stage and name it app.jar
+COPY --from=build /build/target/*.jar app.jar
 
-# Expose default port (Render will still inject PORT env variable)
+# Expose port (Render will inject PORT env)
 EXPOSE 8080
 
-# Start the Spring Boot application
+# Run the Spring Boot application
 ENTRYPOINT ["java", "-jar", "app.jar"]
